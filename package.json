@@ -1,0 +1,27 @@
+{
+  "name": "network-testing",
+  "version": "1.0.0",
+  "description": "Test your live Network with Jest.",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidegaspar/network-testing.git"
+  },
+  "keywords": [
+    "network",
+    "testing",
+    "jest"
+  ],
+  "author": "davidegaspar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidegaspar/network-testing/issues"
+  },
+  "homepage": "https://github.com/davidegaspar/network-testing#readme"
+}

@@ -4,7 +4,7 @@
   "description": "examples",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/*"
+    "test": "mocha --timeout 0 tests/single.test.js"
   },
   "license": "ISC",
   "dependencies": {},

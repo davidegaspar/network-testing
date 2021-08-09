@@ -1,7 +1,7 @@
 {
   "name": "network-testing",
   "version": "1.0.0",
-  "description": "Test your live Network with Jest.",
+  "description": "Test your live Network.",
   "main": "index.js",
   "directories": {
     "example": "examples"
@@ -15,8 +15,7 @@
   },
   "keywords": [
     "network",
-    "testing",
-    "jest"
+    "testing"
   ],
   "author": "davidegaspar",
   "license": "ISC",

@@ -55,9 +55,10 @@ class NetworkTest extends net.Socket {
         this.retries = this.retries - 1;
         this.verify();
       } else {
-        // console.log("retry", "stop");
+        console.log("retry", "stop");
         this.destroy();
-        throw error;
+        // TODO: handle error errors different from connect errors
+        throw new Error(`${error.message} ${this.retries}`);
       }
     }
   }

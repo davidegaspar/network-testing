@@ -6,29 +6,29 @@ describe("Single Example", () => {
     network = new NetworkTest({}, 1000, 2);
   });
 
-  it("should connect: pass", (done) => {
+  xit("should connect: pass", (done) => {
     network.whenConnectTo("davidegaspar.dev", 443);
 
     network.then((event) => {
       expect(event).to.equal(NetworkEvents.CONNECT);
     }, done);
   });
-  it("should connect: fail due to error", (done) => {
+  xit("should connect: fail due to error", (done) => {
     network.whenConnectTo("some.host.that.does.not.exist", 443);
 
     network.then((event) => {
       expect(event).to.equal(NetworkEvents.CONNECT);
     }, done);
   });
-  xit("should connect: fail due to timeout", (done) => {
-    network.whenConnectTo("some.host.that.times.out", 443);
+  it("should connect: fail due to timeout", (done) => {
+    network.whenConnectTo("k8s-api.nonprod.na.conde.digital", 443);
 
     network.then((event) => {
       expect(event).to.equal(NetworkEvents.CONNECT);
     }, done);
   });
 
-  it("should error: pass", (done) => {
+  xit("should error: pass", (done) => {
     network.whenConnectTo("some.host.that.does.not.exist", 443);
 
     network.then((event, error) => {
@@ -36,8 +36,7 @@ describe("Single Example", () => {
       expect(error.code).to.equal("ENOTFOUND");
     }, done);
   });
-  it("should error: fail due to connect", (done) => {
-    //TODO: weird error
+  xit("should error: fail due to connect", (done) => {
     network.whenConnectTo("davidegaspar.dev", 443);
 
     network.then((event, error) => {
@@ -46,7 +45,7 @@ describe("Single Example", () => {
     }, done);
   });
   xit("should error: fail due to timeout", (done) => {
-    network.whenConnectTo("some.host.that.times.out", 443);
+    network.whenConnectTo("k8s-api.nonprod.na.conde.digital", 443);
 
     network.then((event, error) => {
       expect(event).to.equal(NetworkEvents.ERROR);
@@ -55,7 +54,7 @@ describe("Single Example", () => {
   });
 
   // xit("should timeout", (done) => {
-  //   network.whenConnectTo("some.host.that.times.out", 443);
+  //   network.whenConnectTo("k8s-api.nonprod.na.conde.digital", 443);
 
   //   network.then((event) => {
   //     expect(event).to.equal(NetworkEvents.TIMEOUT);

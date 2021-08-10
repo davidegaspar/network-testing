@@ -7,26 +7,26 @@ const NetworkEvents = Object.freeze({
 });
 
 class NetworkTest extends net.Socket {
-  constructor(options, timeout = 1000, retries = 2) {
+  constructor(options, timeout = 1000, maxAttempts = 3) {
     super(options);
     super.setTimeout(timeout);
-    this.retries = retries;
+    this.maxAttempts = maxAttempts;
+    this.attemptCount = 0;
+    this.errorStack = [];
+    this.eventStack = [];
   }
 
   then(ex, done) {
     this.exFn = ex;
     this.done = done;
     this.on("connect", () => {
-      // console.log("connect!");
-      this.retry(NetworkEvents.CONNECT, null);
+      this.attempt(NetworkEvents.CONNECT, null);
     });
     this.on("timeout", () => {
-      // console.log("timeout!");
-      this.retry(NetworkEvents.TIMEOUT, null);
+      this.attempt(NetworkEvents.TIMEOUT, null);
     });
     this.on("error", (error) => {
-      // console.log("error!");
-      this.retry(NetworkEvents.ERROR, error);
+      this.attempt(NetworkEvents.ERROR, error);
     });
     this.verify();
   }
@@ -37,28 +37,25 @@ class NetworkTest extends net.Socket {
   }
 
   verify() {
+    this.attemptCount++;
     super.connect(this.port, this.host);
   }
 
-  retry(event, error) {
-    // console.log("retry", event, error);
+  attempt(event, eventError) {
+    this.eventStack.push({ event, eventError });
+    console.log("attempt", event, eventError, this.attemptCount);
     try {
-      this.exFn(event, error);
-      // console.log("retry", "ok");
+      this.exFn(event, eventError);
       this.destroy();
       this.done();
-    } catch (err) {
-      // console.log("retry catch", err);
-      // console.log("retries", this.retries);
-      if (this.retries > 0) {
-        // console.log("retry", "again");
-        this.retries = this.retries - 1;
+    } catch (error) {
+      if (this.attemptCount <= this.maxAttempts) {
+        console.log("again");
         this.verify();
       } else {
-        console.log("retry", "stop");
+        console.log("stop");
         this.destroy();
-        // TODO: handle error errors different from connect errors
-        throw new Error(`${error.message} ${this.retries}`);
+        throw new Error(`${error} ${eventError} attempt:${this.attemptCount}`);
       }
     }
   }

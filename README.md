@@ -1,8 +1,8 @@
 # Network Testing
 
-Test your live Network with Jest.
+Test your live Network.
 
-Small semantic Socket wrapper to be used with Jest.
+Small semantic Socket wrapper to be used with Testing frameworks.
 
 ## Features
 - Tests become more readable.
@@ -12,7 +12,7 @@ Small semantic Socket wrapper to be used with Jest.
 ## Install
 
 ```sh
-npm install --save-dev jest network-testing
+npm install --save-dev network-testing
 ```
 
 ## Future

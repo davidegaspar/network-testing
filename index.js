@@ -2,7 +2,6 @@ const net = require("net");
 
 const NetworkEvents = Object.freeze({
   CONNECT: "connect",
-  TIMEOUT: "timeout",
   ERROR: "error",
 });
 
@@ -23,9 +22,11 @@ class NetworkTest extends net.Socket {
       this.attempt(NetworkEvents.CONNECT, null);
     });
     this.on("timeout", () => {
-      this.attempt(NetworkEvents.TIMEOUT, null);
+      this.destroy();
+      this.attempt(NetworkEvents.ERROR, new Error("timeout"));
     });
     this.on("error", (error) => {
+      this.destroy();
       this.attempt(NetworkEvents.ERROR, error);
     });
     this.verify();
@@ -42,20 +43,25 @@ class NetworkTest extends net.Socket {
   }
 
   attempt(event, eventError) {
-    this.eventStack.push({ event, eventError });
+    this.eventStack.push(event);
     console.log("attempt", event, eventError, this.attemptCount);
     try {
       this.exFn(event, eventError);
-      this.destroy();
+      
       this.done();
     } catch (error) {
       if (this.attemptCount <= this.maxAttempts) {
         console.log("again");
+        this.destroy();
         this.verify();
       } else {
         console.log("stop");
         this.destroy();
-        throw new Error(`${error} ${eventError} attempt:${this.attemptCount}`);
+        throw new Error(
+          `${error} ${eventError} attempt:${
+            this.attemptCount
+          } ${this.eventStack.join()}`
+        );
       }
     }
   }
